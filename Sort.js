@@ -1,3 +1,4 @@
+
 class Sort {
 	
 	constructor( algorithm, data = null ) {
@@ -8,7 +9,8 @@ class Sort {
 			case "a": { this.algA(); } break;
 			case "b": { this.algB(); } break;
 			case "c": { this.algC(); } break;
-			default: return console.log( "choose an algorithm ('a', 'b' or 'c')" );
+			case "d": { this.algD(); } break;
+			default: return console.log( "choose an algorithm ('a', 'b', 'c' or 'd')" );
 		}
 		console.log( "Algorithm(" + algorithm + ") took: "  + ((performance.now()-sTime)/1000) + " seconds. (size: " + this.objS.length + ")" );
 		return this.objS;
@@ -74,8 +76,33 @@ class Sort {
 		this.algC();
 	}
 	
+	algD( offset = 0, maxIdx = "9" ) {
+		if ( offset > 0 && offset >= maxIdx.length ) {
+			return this.objS = this.obj;
+		}
+		var buckets = {"0":[],"1":[],"2":[],"3":[],"4":[],"5":[],"6":[],"7":[],"8":[],"9":[]};
+		var objLen = this.obj.length;
+		for( var i = 0; i < objLen; i++ ) {
+			if ( !offset && this.obj[i] > maxIdx ) {
+				maxIdx += "9"; 
+			}
+			var key = this.obj[i]+"";
+			key = key[ key.length-1-offset ]
+			if ( !key ) key = "0";
+			buckets[key].push( this.obj[i] );
+		}
+		this.obj = [];
+		for( var key in buckets ) {
+			this.obj = this.obj.concat( buckets[ key ] );
+		}
+		this.algD( ++offset, maxIdx );
+	}
+	
 }
 
 console.log( new Sort( "a" ) );
 console.log( new Sort( "b" ) );
 console.log( new Sort( "c" ) );
+console.log( new Sort( "d" ) );
+
+
